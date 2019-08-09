@@ -59,7 +59,7 @@ public class MQAdminInstance {
      */
     public static RPCHook getAclRPCHook(RMQConfigure rmqConfigure) {
         if (rmqConfigure.isAclEnable())
-            return new AclClientRPCHook(new SessionCredentials("rocketmq2", "12345678"));
+            return new AclClientRPCHook(new SessionCredentials(rmqConfigure.getAccessKey(), rmqConfigure.getSecretKey()));
         else
             return null;
     }

@@ -61,6 +61,26 @@ public class RMQConfigure {
 
     private boolean loginRequired = false;
 
+    private String accessKey = "rocketmq2";
+
+    private String secretKey = "12345678";
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
     public String getNamesrvAddr() {
         return namesrvAddr;
     }
