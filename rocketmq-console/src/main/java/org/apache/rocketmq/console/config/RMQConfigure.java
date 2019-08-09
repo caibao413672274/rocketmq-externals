@@ -16,8 +16,6 @@
  */
 package org.apache.rocketmq.console.config;
 
-import java.io.File;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.common.MixAll;
 import org.slf4j.Logger;
@@ -29,6 +27,8 @@ import org.springframework.boot.web.servlet.ErrorPageRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+
+import java.io.File;
 
 import static org.apache.rocketmq.client.ClientConfig.SEND_MESSAGE_WITH_VIP_CHANNEL_PROPERTY;
 
@@ -48,6 +48,16 @@ public class RMQConfigure {
     private boolean enableDashBoardCollect;
 
     private String msgTrackTopicName;
+
+    public boolean isAclEnable() {
+        return aclEnable;
+    }
+
+    public void setAclEnable(boolean aclEnable) {
+        this.aclEnable = aclEnable;
+    }
+
+    private boolean aclEnable = false;
 
     private boolean loginRequired = false;
 

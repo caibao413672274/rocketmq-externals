@@ -16,15 +16,15 @@
  */
 package org.apache.rocketmq.console.controller;
 
+import com.google.common.base.Preconditions;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.apache.rocketmq.console.model.request.SendTopicMessageRequest;
 import org.apache.rocketmq.console.model.request.TopicConfigInfo;
 import org.apache.rocketmq.console.service.ConsumerService;
 import org.apache.rocketmq.console.service.TopicService;
 import org.apache.rocketmq.console.util.JsonUtil;
-import com.google.common.base.Preconditions;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -71,11 +71,11 @@ public class TopicController {
     }
 
 
-    @RequestMapping(value = "/createOrUpdate.do", method = { RequestMethod.POST})
+    @RequestMapping(value = "/createOrUpdate.do", method = {RequestMethod.POST})
     @ResponseBody
     public Object topicCreateOrUpdateRequest(@RequestBody TopicConfigInfo topicCreateOrUpdateRequest) {
         Preconditions.checkArgument(CollectionUtils.isNotEmpty(topicCreateOrUpdateRequest.getBrokerNameList()) || CollectionUtils.isNotEmpty(topicCreateOrUpdateRequest.getClusterNameList()),
-            "clusterName or brokerName can not be all blank");
+                "clusterName or brokerName can not be all blank");
         logger.info("op=look topicCreateOrUpdateRequest={}", JsonUtil.obj2String(topicCreateOrUpdateRequest));
         topicService.createOrUpdate(topicCreateOrUpdateRequest);
         return true;
@@ -96,14 +96,14 @@ public class TopicController {
     @RequestMapping(value = "/examineTopicConfig.query")
     @ResponseBody
     public Object examineTopicConfig(@RequestParam String topic,
-        @RequestParam(required = false) String brokerName) throws RemotingException, MQClientException, InterruptedException {
+                                     @RequestParam(required = false) String brokerName) throws RemotingException, MQClientException, InterruptedException {
         return topicService.examineTopicConfig(topic);
     }
 
     @RequestMapping(value = "/sendTopicMessage.do", method = {RequestMethod.POST})
     @ResponseBody
     public Object sendTopicMessage(
-        @RequestBody SendTopicMessageRequest sendTopicMessageRequest) throws RemotingException, MQClientException, InterruptedException {
+            @RequestBody SendTopicMessageRequest sendTopicMessageRequest) throws RemotingException, MQClientException, InterruptedException {
         return topicService.sendTopicMessageRequest(sendTopicMessageRequest);
     }
 

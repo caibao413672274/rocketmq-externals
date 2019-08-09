@@ -22,12 +22,6 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.client.consumer.DefaultMQPullConsumer;
 import org.apache.rocketmq.client.consumer.PullResult;
@@ -38,14 +32,22 @@ import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.common.protocol.body.Connection;
 import org.apache.rocketmq.common.protocol.body.ConsumeMessageDirectlyResult;
 import org.apache.rocketmq.common.protocol.body.ConsumerConnection;
+import org.apache.rocketmq.console.config.RMQConfigure;
 import org.apache.rocketmq.console.exception.ServiceException;
 import org.apache.rocketmq.console.model.MessageView;
 import org.apache.rocketmq.console.service.MessageService;
+import org.apache.rocketmq.console.service.client.MQAdminInstance;
 import org.apache.rocketmq.tools.admin.MQAdminExt;
 import org.apache.rocketmq.tools.admin.api.MessageTrack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.Resource;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -58,6 +60,8 @@ public class MessageServiceImpl implements MessageService {
     private final static int QUERY_MESSAGE_MAX_NUM = 64;
     @Resource
     private MQAdminExt mqAdminExt;
+    @Resource
+    private RMQConfigure rmqConfigure;
 
     public Pair<MessageView, List<MessageTrack>> viewMessage(String subject, final String msgId) {
         try {
@@ -65,8 +69,7 @@ public class MessageServiceImpl implements MessageService {
             MessageExt messageExt = mqAdminExt.viewMessage(subject, msgId);
             List<MessageTrack> messageTrackList = messageTrackDetail(messageExt);
             return new Pair<>(MessageView.fromMessageExt(messageExt), messageTrackList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new ServiceException(-1, String.format("Failed to query message by Id: %s", msgId));
         }
     }
@@ -80,15 +83,14 @@ public class MessageServiceImpl implements MessageService {
                     return MessageView.fromMessageExt(messageExt);
                 }
             });
-        }
-        catch (Exception err) {
+        } catch (Exception err) {
             throw Throwables.propagate(err);
         }
     }
 
     @Override
     public List<MessageView> queryMessageByTopic(String topic, final long begin, final long end) {
-        DefaultMQPullConsumer consumer = new DefaultMQPullConsumer(MixAll.TOOLS_CONSUMER_GROUP, null);
+        DefaultMQPullConsumer consumer = new DefaultMQPullConsumer(MixAll.TOOLS_CONSUMER_GROUP, MQAdminInstance.getAclRPCHook(rmqConfigure));
         List<MessageView> messageViewList = Lists.newArrayList();
         try {
             String subExpression = "*";
@@ -131,8 +133,7 @@ public class MessageServiceImpl implements MessageService {
                             case OFFSET_ILLEGAL:
                                 break READQ;
                         }
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         break;
                     }
                 }
@@ -147,11 +148,9 @@ public class MessageServiceImpl implements MessageService {
                 }
             });
             return messageViewList;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw Throwables.propagate(e);
-        }
-        finally {
+        } finally {
             consumer.shutdown();
         }
     }
@@ -160,8 +159,7 @@ public class MessageServiceImpl implements MessageService {
     public List<MessageTrack> messageTrackDetail(MessageExt msg) {
         try {
             return mqAdminExt.messageTrackDetail(msg);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.error("op=messageTrackDetailError", e);
             return Collections.emptyList();
         }
@@ -170,12 +168,11 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public ConsumeMessageDirectlyResult consumeMessageDirectly(String topic, String msgId, String consumerGroup,
-        String clientId) {
+                                                               String clientId) {
         if (StringUtils.isNotBlank(clientId)) {
             try {
                 return mqAdminExt.consumeMessageDirectly(consumerGroup, clientId, topic, msgId);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw Throwables.propagate(e);
             }
         }
@@ -189,8 +186,7 @@ public class MessageServiceImpl implements MessageService {
                 logger.info("clientId={}", connection.getClientId());
                 return mqAdminExt.consumeMessageDirectly(consumerGroup, connection.getClientId(), topic, msgId);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw Throwables.propagate(e);
         }
         throw new IllegalStateException("NO CONSUMER");

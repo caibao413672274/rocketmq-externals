@@ -16,9 +16,13 @@
  */
 package org.apache.rocketmq.console.service.client;
 
+import org.apache.rocketmq.acl.common.AclClientRPCHook;
+import org.apache.rocketmq.acl.common.SessionCredentials;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.impl.MQClientAPIImpl;
 import org.apache.rocketmq.client.impl.factory.MQClientInstance;
+import org.apache.rocketmq.console.config.RMQConfigure;
+import org.apache.rocketmq.remoting.RPCHook;
 import org.apache.rocketmq.remoting.RemotingClient;
 import org.apache.rocketmq.tools.admin.DefaultMQAdminExt;
 import org.apache.rocketmq.tools.admin.DefaultMQAdminExtImpl;
@@ -48,22 +52,32 @@ public class MQAdminInstance {
         return Reflect.on(defaultMQAdminExtImpl).get("mqClientInstance");
     }
 
-    public static void initMQAdminInstance(long timeoutMillis) throws MQClientException {
+    /**
+     * acl obj
+     *
+     * @return
+     */
+    public static RPCHook getAclRPCHook(RMQConfigure rmqConfigure) {
+        if (rmqConfigure.isAclEnable())
+            return new AclClientRPCHook(new SessionCredentials("rocketmq2", "12345678"));
+        else
+            return null;
+    }
+
+    public static void initMQAdminInstance(long timeoutMillis, RMQConfigure rmqConfigure) throws MQClientException {
         Integer nowCount = INIT_COUNTER.get();
         if (nowCount == null) {
             DefaultMQAdminExt defaultMQAdminExt;
             if (timeoutMillis > 0) {
-                defaultMQAdminExt = new DefaultMQAdminExt(timeoutMillis);
-            }
-            else {
-                defaultMQAdminExt = new DefaultMQAdminExt();
+                defaultMQAdminExt = new DefaultMQAdminExt(getAclRPCHook(rmqConfigure), timeoutMillis);
+            } else {
+                defaultMQAdminExt = new DefaultMQAdminExt(getAclRPCHook(rmqConfigure));
             }
             defaultMQAdminExt.setInstanceName(Long.toString(System.currentTimeMillis()));
             defaultMQAdminExt.start();
             MQ_ADMIN_EXT_THREAD_LOCAL.set(defaultMQAdminExt);
             INIT_COUNTER.set(1);
-        }
-        else {
+        } else {
             INIT_COUNTER.set(nowCount + 1);
         }
 

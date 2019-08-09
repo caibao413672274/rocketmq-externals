@@ -43,6 +43,7 @@ import org.apache.rocketmq.console.model.request.SendTopicMessageRequest;
 import org.apache.rocketmq.console.model.request.TopicConfigInfo;
 import org.apache.rocketmq.console.service.AbstractCommonService;
 import org.apache.rocketmq.console.service.TopicService;
+import org.apache.rocketmq.console.service.client.MQAdminInstance;
 import org.apache.rocketmq.tools.command.CommandUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,7 +210,7 @@ public class TopicServiceImpl extends AbstractCommonService implements TopicServ
     }
 
     private TopicList  getSystemTopicList() {
-        DefaultMQProducer producer = new DefaultMQProducer(MixAll.SELF_TEST_PRODUCER_GROUP);
+        DefaultMQProducer producer = new DefaultMQProducer(MixAll.SELF_TEST_PRODUCER_GROUP, MQAdminInstance.getAclRPCHook(rMQConfigure));
         producer.setInstanceName(String.valueOf(System.currentTimeMillis()));
         producer.setNamesrvAddr(rMQConfigure.getNamesrvAddr());
 

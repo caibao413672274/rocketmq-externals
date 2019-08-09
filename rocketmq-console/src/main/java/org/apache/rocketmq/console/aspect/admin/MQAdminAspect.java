@@ -16,8 +16,8 @@
  */
 package org.apache.rocketmq.console.aspect.admin;
 
-import java.lang.reflect.Method;
 import org.apache.rocketmq.console.aspect.admin.annotation.MultiMQAdminCmdMethod;
+import org.apache.rocketmq.console.config.RMQConfigure;
 import org.apache.rocketmq.console.service.client.MQAdminInstance;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -28,10 +28,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.lang.reflect.Method;
+
 @Aspect
 @Service
 public class MQAdminAspect {
     private Logger logger = LoggerFactory.getLogger(MQAdminAspect.class);
+    @Resource
+    RMQConfigure configure;
 
     public MQAdminAspect() {
     }
@@ -51,18 +56,16 @@ public class MQAdminAspect {
         long start = System.currentTimeMillis();
         Object obj = null;
         try {
-            MethodSignature signature = (MethodSignature)joinPoint.getSignature();
+            MethodSignature signature = (MethodSignature) joinPoint.getSignature();
             Method method = signature.getMethod();
             MultiMQAdminCmdMethod multiMQAdminCmdMethod = method.getAnnotation(MultiMQAdminCmdMethod.class);
             if (multiMQAdminCmdMethod != null && multiMQAdminCmdMethod.timeoutMillis() > 0) {
-                MQAdminInstance.initMQAdminInstance(multiMQAdminCmdMethod.timeoutMillis());
-            }
-            else {
-                MQAdminInstance.initMQAdminInstance(0);
+                MQAdminInstance.initMQAdminInstance(multiMQAdminCmdMethod.timeoutMillis(), configure);
+            } else {
+                MQAdminInstance.initMQAdminInstance(0, configure);
             }
             obj = joinPoint.proceed();
-        }
-        finally {
+        } finally {
             MQAdminInstance.destroyMQAdminInstance();
             logger.debug("op=look method={} cost={}", joinPoint.getSignature().getName(), System.currentTimeMillis() - start);
         }
