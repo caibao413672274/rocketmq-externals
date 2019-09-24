@@ -67,8 +67,8 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http','Notifica
         }).success(function (resp) {
             if(resp.status ==0){
                 $scope.allConsumerGrouopList = resp.data;
-                console.log($scope.allConsumerGrouopList);
-                console.log(JSON.stringify(resp));
+                //console.log($scope.allConsumerGrouopList);
+                //console.log(JSON.stringify(resp));
                 $scope.showConsumerGroupList($scope.paginationConf.currentPage,$scope.allConsumerGrouopList.length);
 
                 //Hide loader
@@ -119,7 +119,7 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http','Notifica
         var lowExceptStr =  $scope.filterStr.toLowerCase();
         var canShowList = [];
         $scope.allConsumerGrouopList.forEach(function(element) {
-            console.log(element)
+            //console.log(element)
             if (element.group.toLowerCase().indexOf(lowExceptStr) != -1){
                 canShowList.push(element);
             }
@@ -138,8 +138,8 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http','Notifica
         var to = (from + perPage)>totalItem?totalItem:from + perPage;
         $scope.consumerGroupShowList = $scope.allConsumerGrouopList.slice(from, to);
         $scope.paginationConf.totalItems = totalItem ;
-        console.log($scope.consumerGroupShowList)
-        console.log($scope.paginationConf.totalItems)
+        //console.log($scope.consumerGroupShowList)
+        //console.log($scope.paginationConf.totalItems)
         $scope.doSort()
     };
     $scope.openAddDialog = function () {
@@ -163,13 +163,13 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http','Notifica
             }];
             bIsUpdate = false;
         }
-        console.log(request);
+        //console.log(request);
         $http({
             method: "GET",
             url: "cluster/list.query"
         }).success(function (resp) {
             if(resp.status ==0){
-                console.log(resp);
+                //console.log(resp);
                 ngDialog.open({
                     preCloseCallback: function(value) {
                         // Refresh topic list
@@ -196,7 +196,7 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http','Notifica
             params:{consumerGroup:consumerGroupName}
         }).success(function (resp) {
             if(resp.status ==0){
-                console.log(resp);
+                //console.log(resp);
                 ngDialog.open({
                     template: 'consumerTopicViewDialog',
                     controller: 'consumerTopicViewDialogController',
@@ -215,7 +215,7 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http','Notifica
             params:{consumerGroup:consumerGroupName}
         }).success(function (resp) {
             if(resp.status ==0){
-                console.log(resp);
+                //console.log(resp);
                 ngDialog.open({
                     template: 'clientInfoDialog',
                     // controller: 'addTopicDialogController',
@@ -233,7 +233,7 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http','Notifica
             params:{consumerGroup:consumerGroupName}
         }).success(function (resp) {
             if(resp.status ==0){
-                console.log(resp);
+                //console.log(resp);
                 $scope.openCreateOrUpdateDialog(resp.data);
             }else {
                 Notification.error({message: resp.errMsg, delay: 2000});
@@ -251,7 +251,7 @@ module.controller('consumerController', ['$scope', 'ngDialog', '$http','Notifica
             }
         }).success(function (resp) {
             if(resp.status ==0){
-                console.log(resp);
+                //console.log(resp);
 
                 ngDialog.open({
                     preCloseCallback: function(value) {
@@ -297,9 +297,9 @@ module.controller('deleteConsumerDialogController', ['$scope', 'ngDialog', '$htt
         $scope.selectedClusterList = [];
         $scope.selectedBrokerNameList = [];
         $scope.delete = function () {
-            console.log($scope.selectedClusterList);
-            console.log($scope.selectedBrokerNameList);
-            console.log($scope.ngDialogData.consumerGroupName);
+            //console.log($scope.selectedClusterList);
+            //console.log($scope.selectedBrokerNameList);
+            //console.log($scope.ngDialogData.consumerGroupName);
             $http({
                 method: "POST",
                 url: "consumer/deleteSubGroup.do",
@@ -319,7 +319,7 @@ module.controller('deleteConsumerDialogController', ['$scope', 'ngDialog', '$htt
 module.controller('consumerModifyDialogController', ['$scope', 'ngDialog', '$http','Notification',function ($scope, ngDialog, $http,Notification) {
         $scope.postConsumerRequest = function (consumerRequest) {
             var request = JSON.parse(JSON.stringify(consumerRequest));
-            console.log(request);
+            //console.log(request);
             $http({
                 method: "POST",
                 url: "consumer/createOrUpdate.do",

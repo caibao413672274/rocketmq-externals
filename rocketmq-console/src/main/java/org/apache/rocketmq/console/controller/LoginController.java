@@ -52,7 +52,10 @@ public class LoginController {
     public Object check(HttpServletRequest request) {
         LoginInfo loginInfo = new LoginInfo();
 
-        loginInfo.setLogined(WebUtil.getValueFromSession(request, WebUtil.USER_NAME) != null);
+        UserInfo userInfo = (UserInfo) WebUtil.getValueFromSession(request, WebUtil.USER_INFO);
+        loginInfo.setLogined(userInfo != null);
+        if (userInfo != null)
+            loginInfo.setAdmin(userInfo.getUser().getType() == 1 ? true : false);
         loginInfo.setLoginRequired(configure.isLoginRequired());
 
         return loginInfo;
@@ -61,9 +64,9 @@ public class LoginController {
     @RequestMapping(value = "/login.do", method = RequestMethod.POST)
     @ResponseBody
     public Object login(@RequestParam("username") String username,
-                           @RequestParam(value = "password") String password,
-                           HttpServletRequest request,
-                           HttpServletResponse response) throws Exception {
+                        @RequestParam(value = "password") String password,
+                        HttpServletRequest request,
+                        HttpServletResponse response) throws Exception {
         logger.info("user:{} login", username);
         User user = userService.queryByUsernameAndPassword(username, password);
 

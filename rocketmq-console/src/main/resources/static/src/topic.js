@@ -44,8 +44,8 @@ module.controller('topicController', ['$scope', 'ngDialog', '$http','Notificatio
             }).success(function (resp) {
                 if(resp.status ==0){
                     $scope.allTopicList = resp.data.topicList.sort();
-                    console.log($scope.allTopicList);
-                    console.log(JSON.stringify(resp));
+                    //console.log($scope.allTopicList);
+                    //console.log(JSON.stringify(resp));
                     $scope.showTopicList(1,$scope.allTopicList.length);
 
                 }else {
@@ -122,13 +122,13 @@ module.controller('topicController', ['$scope', 'ngDialog', '$http','Notificatio
         var perPage = $scope.paginationConf.itemsPerPage;
         var from = (currentPage - 1) * perPage;
         var to = (from + perPage)>totalItem?totalItem:from + perPage;
-        console.log($scope.allTopicList);
-        console.log(from)
-        console.log(to)
+        //console.log($scope.allTopicList);
+        //console.log(from)
+        //console.log(to)
         $scope.topicShowList = $scope.allTopicList.slice(from, to);
         $scope.paginationConf.totalItems = totalItem ;
-        console.log($scope.topicShowList)
-        console.log($scope.paginationConf.totalItems)
+        //console.log($scope.topicShowList)
+        //console.log($scope.paginationConf.totalItems)
         $scope.filterList(currentPage);
     };
     $scope.deleteTopic= function (topic) {
@@ -154,7 +154,7 @@ module.controller('topicController', ['$scope', 'ngDialog', '$http','Notificatio
             params: {topic: topic}
         }).success(function (resp) {
             if (resp.status == 0) {
-                console.log(JSON.stringify(resp));
+                //console.log(JSON.stringify(resp));
                 ngDialog.open({
                     template: 'statsViewDialog',
                     trapFocus:false,
@@ -175,7 +175,7 @@ module.controller('topicController', ['$scope', 'ngDialog', '$http','Notificatio
             params: {topic: topic}
         }).success(function (resp) {
             if (resp.status == 0) {
-                console.log(JSON.stringify(resp));
+                //console.log(JSON.stringify(resp));
                 ngDialog.open({
                     template: 'routerViewDialog',
                     controller: 'routerViewDialogController',
@@ -199,7 +199,7 @@ module.controller('topicController', ['$scope', 'ngDialog', '$http','Notificatio
             params: {topic: topic}
         }).success(function (resp) {
             if (resp.status == 0) {
-                console.log(JSON.stringify(resp));
+                //console.log(JSON.stringify(resp));
                 ngDialog.open({
                     template: 'consumerViewDialog',
                     data:{
@@ -299,7 +299,7 @@ module.controller('topicController', ['$scope', 'ngDialog', '$http','Notificatio
             url: "cluster/list.query"
         }).success(function (resp) {
             if(resp.status ==0){
-                console.log(resp);
+                //console.log(resp);
                 ngDialog.open({
                     preCloseCallback: function(value) {
                         // Refresh topic list
@@ -327,9 +327,9 @@ module.controller('topicController', ['$scope', 'ngDialog', '$http','Notificatio
 
 module.controller('topicModifyDialogController', ['$scope', 'ngDialog', '$http','Notification',function ($scope, ngDialog, $http,Notification) {
         $scope.postTopicRequest = function (topicRequestItem) {
-            console.log(topicRequestItem);
+            //console.log(topicRequestItem);
             var request = JSON.parse(JSON.stringify(topicRequestItem));
-            console.log(request);
+            //console.log(request);
             $http({
                 method: "POST",
                 url: "topic/createOrUpdate.do",
@@ -349,9 +349,9 @@ module.controller('consumerResetOffsetDialogController',['$scope', 'ngDialog', '
         $scope.timepicker.date = moment().format('YYYY-MM-DD HH:mm');
         $scope.timepicker.options = {format: 'YYYY-MM-DD HH:mm', showClear: true};
         $scope.resetOffset = function () {
-            console.log($scope.timepicker.date);
-            console.log($scope.timepicker.date.valueOf());
-            console.log($scope.ngDialogData.selectedConsumerGroup);
+            //console.log($scope.timepicker.date);
+            //console.log($scope.timepicker.date.valueOf());
+            //console.log($scope.ngDialogData.selectedConsumerGroup);
             $http({
                 method: "POST",
                 url: "consumer/resetOffset.do",

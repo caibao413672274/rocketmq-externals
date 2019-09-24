@@ -21,6 +21,16 @@ public class LoginInfo {
     private boolean loginRequired;
     private boolean logined;
 
+    private boolean isAdmin;
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
     public boolean isLoginRequired() {
         return loginRequired;
     }

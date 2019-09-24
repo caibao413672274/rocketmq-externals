@@ -28,7 +28,7 @@ module.controller('producerController', ['$scope', '$http','Notification',functi
     }).success(function (resp) {
         if(resp.status ==0){
             $scope.allTopicList = resp.data.topicList.sort();
-            console.log($scope.allTopicList);
+            //console.log($scope.allTopicList);
         }else {
             Notification.error({message: resp.errMsg, delay: 2000});
         }

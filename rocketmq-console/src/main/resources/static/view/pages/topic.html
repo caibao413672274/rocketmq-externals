@@ -30,7 +30,7 @@
                 </md-checkbox>
                 <md-checkbox aria-label="Checkbox" ng-model="filterSystem" class="md-primary">{{'SYSTEM' | translate}}
                 </md-checkbox>
-                <button class="btn btn-raised btn-sm btn-primary" type="button" ng-click="openAddDialog()">{{'ADD' |
+                <button class="btn btn-raised btn-sm btn-primary" ng-show="{{isAdmin}}"  type="button" ng-click="openAddDialog()">{{'ADD' |
                     translate}}/ {{'UPDATE' | translate}}
                 </button>
                 <button class="btn btn-raised btn-sm btn-primary" type="button" ng-click="refreshTopicList()">
@@ -60,7 +60,7 @@
                             <button class="btn btn-raised btn-sm btn-primary" type="button"
                                     ng-click="consumerView(topic)">consumer {{'MANAGE' | translate}}
                             </button>
-                            <button class="btn btn-raised btn-sm btn-primary" type="button"
+                            <button class="btn btn-raised btn-sm btn-primary" ng-show="{{isAdmin}}"  type="button"
                                     ng-click="openUpdateDialog(topic, sysFlag)">topic {{'CONFIG' |translate}}
                             </button>
                             <button class="btn btn-raised btn-sm btn-primary" type="button"
@@ -68,11 +68,11 @@
                                     ng-click="openSendTopicMessageDialog(topic)">{{'SEND_MSG' | translate}}
                             </button>
                             <button class="btn btn-raised btn-sm btn-danger" type="button"
-                                    ng-show="{{!sysFlag}}"
+                                    ng-show="{{!sysFlag && isAdmin }}"
                                     ng-click="openConsumerResetOffsetDialog(topic)">{{'RESET_CUS_OFFSET' | translate}}
                             </button>
                             <button class="btn btn-raised btn-sm btn-danger" type="button"
-                                    ng-show="{{!sysFlag}}"
+                                    ng-show="{{!sysFlag && isAdmin}}"
                                     ng-confirm-click="Are you sure to delete?"
                                     confirmed-click="deleteTopic(topic)">{{'DELETE' | translate}}
                             </button>

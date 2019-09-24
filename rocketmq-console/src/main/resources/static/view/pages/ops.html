@@ -21,18 +21,18 @@
             <md-chips ng-model="namesvrAddrList"  readonly="ctrl.readonly" md-removable="ctrl.removable" md-enable-chip-edit="true"></md-chips>
         </div>
         <div class="pull-left">
-            <button class="btn btn-raised btn-sm btn-primary" type="button" ng-click="updateNameSvrAddr()">{{'UPDATE' | translate}}
+            <button class="btn btn-raised btn-sm btn-primary" ng-show="{{isAdmin}}"  type="button" ng-click="updateNameSvrAddr()">{{'UPDATE' | translate}}
             </button>
         </div>
         <br/>
         <br/>
         <h2 class="md-title">IsUseVIPChannel</h2>
         <div  class="pull-left">
-            <md-switch class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="useVIPChannel">
+            <md-switch class="md-primary"  md-no-ink aria-label="Switch No Ink" ng-model="useVIPChannel">
             </md-switch>
         </div>
         <div class="pull-left">
-            <button class="btn btn-raised btn-sm btn-primary" type="button" ng-click="updateIsVIPChannel()">{{'UPDATE' | translate}}
+            <button class="btn btn-raised btn-sm btn-primary"  ng-show="{{isAdmin}}"  type="button" ng-click="updateIsVIPChannel()">{{'UPDATE' | translate}}
             </button>
         </div>
     </div>
