@@ -26,7 +26,7 @@ public class MQTTBridgeConfiguration {
     public static final String MQTT_PORT_PROPERTY = "iot.mqtt.port";
     public static final String DEFAULT_MQTT_PORT = "1883";
     public static final String MQTT_HOST_PROPERTY = "iot.mqtt.host";
-    public static final String DEFAULT_MQTT_HOST = "127.0.0.1";
+    public static final String DEFAULT_MQTT_HOST = "10.1.54.201";
     public static final String MQTT_SOCKET_BACKLOG = "iot.mqtt.socket.backlog";
     public static final String DEFAULT_SOCKET_BACKLOG = "1024";
     public static final Integer DEFAULT_THREAD_NUM_OF_BOSS_GROUP = 1;

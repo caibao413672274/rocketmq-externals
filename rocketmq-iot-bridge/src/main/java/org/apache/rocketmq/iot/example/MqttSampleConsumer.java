@@ -34,7 +34,8 @@ public class MqttSampleConsumer {
     public static void main(String[] args) {
         String topic = "mqtt-sample";
         int qos = 0;
-        String broker = "tcp://127.0.0.1:1883";
+//        String broker = "tcp://127.0.0.1:1883";
+        String broker = "tcp://10.1.5.83:1883";
         String clinetId = "JavaSampleConsumer";
 
         MemoryPersistence persistence = new MemoryPersistence();
@@ -44,8 +45,11 @@ public class MqttSampleConsumer {
                 MqttClient sampleClient = new MqttClient(broker, clinetId, persistence);
                 MqttConnectOptions connectOptions = new MqttConnectOptions();
                 connectOptions.setCleanSession(true);
+                connectOptions.setUserName("test0001");
+                connectOptions.setPassword("12345678".toCharArray());
                 log.info("Connecting to broker: " + broker);
                 sampleClient.connect(connectOptions);
+
                 log.info("Connected");
                 sampleClient.setCallback(new MqttCallback() {
                     @Override public void connectionLost(Throwable throwable) {
@@ -53,7 +57,8 @@ public class MqttSampleConsumer {
                     }
 
                     @Override public void messageArrived(String s, MqttMessage message) throws Exception {
-                        System.exit(0);
+//                        System.exit(0);
+                        System.out.println(s+";"+new String( message.getPayload()));
                     }
 
                     @Override public void deliveryComplete(IMqttDeliveryToken token) {

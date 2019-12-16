@@ -61,7 +61,7 @@ public class MqttConnectionHandler extends ChannelInboundHandlerAdapter {
         Client client = clientManager.get(ctx.channel());
         String clientId = client != null ? client.getId() : "null";
         doDisconnect(ctx.channel());
-        log.debug("clientId:{} netty exception caught from {}", clientId, ctx.channel(), cause);
+        log.debug("clientId:{} netty exception caught from {}", clientId, ctx.channel());
     }
 
     /**
